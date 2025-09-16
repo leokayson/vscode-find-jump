@@ -3,21 +3,63 @@ import { AssociationManager } from './associationManager';
 import { extensionConfig, Global } from './extension';
 import { getMatchesAndAvailableJumpChars } from './getMatches';
 import { InlineInput } from './inlineInput';
+type findJumpPosition = "charStart" | "charEnd" | "wordStart" | "wordEnd";
 
 export class FindJump {
 	isActive = false;
+	isSelectionMode = false;
+	position: findJumpPosition = "wordEnd";
 	inlineInput!: InlineInput;
 	intervalHandler: any;
 	userInput = "";
 	textEditor!: TextEditor;
 	associationManager = new AssociationManager();
 	activityIndicatorState = false;
-	activatedWithSelection = false;
 	numberOfMatches = 0;
 	decorationOptions: DecorationOptions[] = [];
 	dim?: TextEditorDecorationType;
 	bright?: TextEditorDecorationType;
 	allRanges: Range[] = [];
+
+	activateCharStart = (textEditor: TextEditor): void => {
+		this.position = "charStart";
+		this.activate(textEditor);
+	};
+
+	activateCharEnd = (textEditor: TextEditor): void => {
+		this.position = "charEnd";
+		this.activate(textEditor);
+	};
+
+	activateWordStart = (textEditor: TextEditor): void => {
+		this.position = "wordStart";
+		this.activate(textEditor);``
+	};
+
+	activateWordEnd = (textEditor: TextEditor): void => {
+		this.position = "wordEnd";
+		this.activate(textEditor);
+	};
+
+	activateCharStartSelection = (textEditor: TextEditor): void => {
+		this.isSelectionMode = true;
+		this.activateCharStart(textEditor);
+	};
+
+	activateCharEndSelection = (textEditor: TextEditor): void => {
+		this.isSelectionMode = true;
+		this.activateCharEnd(textEditor);
+	};
+
+	activateWordStartSelection = (textEditor: TextEditor): void => {
+		this.isSelectionMode = true;
+		this.activateWordStart(textEditor);
+	};
+
+	activateWordEndSelection = (textEditor: TextEditor): void => {
+		this.isSelectionMode = true;
+		this.activateWordEnd(textEditor);
+	};
 
 	activate = (textEditor: TextEditor): void => {
 		this.textEditor = textEditor;
@@ -44,10 +86,6 @@ export class FindJump {
 		this.startDim();
 	};
 
-	activateWithSelection = (textEditor: TextEditor): void => {
-		this.activatedWithSelection = true;
-		this.activate(textEditor);
-	};
 
 	onInput = (input: string, char: string) => {
 		if (this.associationManager.associations.has(char)) {
@@ -126,16 +164,11 @@ export class FindJump {
 		if (!assoc) {
 			return;
 		}
-		const cursorPosKey = extensionConfig.jumpCursorPosition as
-			| "charStart"
-			| "charEnd"
-			| "wordStart"
-			| "wordEnd";
 
-		const target = assoc[cursorPosKey]; // 直接映射
+		const target = assoc[this.position];
 
 		this.textEditor.selection = new Selection(
-			this.activatedWithSelection
+			this.isSelectionMode
 				? this.textEditor.selection.anchor
 				: target,
 			target
@@ -149,7 +182,7 @@ export class FindJump {
 	 */
 	cancel = (): void => {
 		this.isActive = false;
-		this.activatedWithSelection = false;
+		this.isSelectionMode = false;
 		this.numberOfMatches = 0;
 		this.userInput = "";
 		this.textEditor.setDecorations(Global.letterDecorationType, []);
