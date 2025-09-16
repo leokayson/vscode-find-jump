@@ -1,4 +1,4 @@
-## 0.1.0 `22 Oct 2019`
+## 0.1.0 `17 Sep 2025`
 
 1. Fork form https://github.com/usernamehw/vscode-find-jump
 2. Remove firstMatch function since I never use it

@@ -241,14 +241,6 @@
 		"menus": {
 			"commandPalette": [
 				{
-					"command": "findJump.activate",
-					"when": "never"
-				},
-				{
-					"command": "findJump.activateWithSelection",
-					"when": "never"
-				},
-				{
 					"command": "findJump.cancel",
 					"when": "never"
 				},
