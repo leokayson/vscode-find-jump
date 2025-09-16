@@ -3,13 +3,12 @@ import { AssociationManager } from './associationManager';
 import { extensionConfig, Global } from './extension';
 import { getMatchesAndAvailableJumpChars } from './getMatches';
 import { InlineInput } from './inlineInput';
-import { first } from './utils';
 
 export class FindJump {
 	isActive = false;
 	inlineInput!: InlineInput;
 	intervalHandler: any;
-	userInput = '';
+	userInput = "";
 	textEditor!: TextEditor;
 	associationManager = new AssociationManager();
 	activityIndicatorState = false;
@@ -33,7 +32,7 @@ export class FindJump {
 
 		this.isActive = true;
 
-		commands.executeCommand('setContext', 'findJumpActive', true);
+		commands.executeCommand("setContext", "findJumpActive", true);
 
 		this.inlineInput = new InlineInput({
 			textEditor,
@@ -64,7 +63,10 @@ export class FindJump {
 
 	performSearch = (): void => {
 		this.decorationOptions = [];
-		const { matches, availableJumpChars } = getMatchesAndAvailableJumpChars(this.textEditor, this.userInput.toLowerCase());
+		const { matches, availableJumpChars } = getMatchesAndAvailableJumpChars(
+			this.textEditor,
+			this.userInput.toLowerCase()
+		);
 
 		if (matches.length > 0) {
 			this.associationManager.dispose();
@@ -86,37 +88,57 @@ export class FindJump {
 			const { index, value } = match;
 			const range = new Range(index, value.start, index, value.end);
 
-			this.allRanges.push(new Range(index, value.start === 0 ? 0 : value.start - 1, index, Math.max(value.start + 1, value.end)));
+			this.allRanges.push(
+				new Range(
+					index,
+					value.start === 0 ? 0 : value.start - 1,
+					index,
+					Math.max(value.start + 1, value.end)
+				)
+			);
 
-			this.decorationOptions.push(this.associationManager.createAssociation(availableJumpChar, range));
+			this.decorationOptions.push(
+				this.associationManager.createAssociation(
+					availableJumpChar,
+					range
+				)
+			);
 		}
 
-		this.textEditor.setDecorations(Global.letterDecorationType, this.decorationOptions);
+		this.textEditor.setDecorations(
+			Global.letterDecorationType,
+			this.decorationOptions
+		);
 
 		if (this.dim && matches.length > 0) {
-			this.bright = this.bright || window.createTextEditorDecorationType({
-				textDecoration: `none; filter: none !important;`,
-			});
+			this.bright =
+				this.bright ||
+				window.createTextEditorDecorationType({
+					textDecoration: `none; filter: none !important;`,
+				});
 			this.textEditor.setDecorations(this.bright, this.allRanges);
 		}
 	};
 
 	jump = (jumpChar: string): void => {
 		this.clearDim();
-		const range = this.associationManager.associations.get(jumpChar);
-
-		if (!range) {
+		const assoc = this.associationManager.associations.get(jumpChar);
+		if (!assoc) {
 			return;
 		}
+		const cursorPosKey = extensionConfig.jumpCursorPosition as
+			| "charStart"
+			| "charEnd"
+			| "wordStart"
+			| "wordEnd";
 
-		const cursorPosition = extensionConfig.jumpCursorPosition;
-		const { line, character } = range[cursorPosition];
+		const target = assoc[cursorPosKey]; // 直接映射
 
 		this.textEditor.selection = new Selection(
-			this.activatedWithSelection ? this.textEditor.selection.start.line : line,
-			this.activatedWithSelection ? this.textEditor.selection.start.character : character,
-			line,
-			character,
+			this.activatedWithSelection
+				? this.textEditor.selection.anchor
+				: target,
+			target
 		);
 
 		this.cancel();
@@ -129,14 +151,14 @@ export class FindJump {
 		this.isActive = false;
 		this.activatedWithSelection = false;
 		this.numberOfMatches = 0;
-		this.userInput = '';
+		this.userInput = "";
 		this.textEditor.setDecorations(Global.letterDecorationType, []);
 		this.clearActivityIndicator();
 		this.inlineInput.destroy();
 		this.associationManager.dispose();
 		this.clearDim();
 
-		commands.executeCommand('setContext', 'findJumpActive', false);
+		commands.executeCommand("setContext", "findJumpActive", false);
 	};
 	/**
 	 * What happens when backspace key is pressed
@@ -163,20 +185,21 @@ export class FindJump {
 		this.updateStatusBarWithActivityIndicator();
 	};
 
-	goToFirstMatch = (): void => {
-		const target = first([...this.associationManager.associations.entries()], ([, { start: a }], [, { start: b }]) => a.compareTo(b));
-		if (target) {
-			this.jump(target[0]);
-		}
-	};
-
 	updateStatusBarWithActivityIndicator = (): void => {
 		const callback = (): void => {
-			this.inlineInput.updateStatusBar(this.userInput, this.numberOfMatches, this.activityIndicatorState);
+			this.inlineInput.updateStatusBar(
+				this.userInput,
+				this.numberOfMatches,
+				this.activityIndicatorState
+			);
 			this.activityIndicatorState = !this.activityIndicatorState;
 		};
 
-		this.inlineInput.updateStatusBar(this.userInput, this.numberOfMatches, this.activityIndicatorState);
+		this.inlineInput.updateStatusBar(
+			this.userInput,
+			this.numberOfMatches,
+			this.activityIndicatorState
+		);
 
 		if (this.intervalHandler === undefined) {
 			this.intervalHandler = setInterval(callback, 800);
@@ -195,7 +218,14 @@ export class FindJump {
 		this.dim = window.createTextEditorDecorationType({
 			textDecoration: `none; filter: grayscale(1);`,
 		});
-		this.textEditor.setDecorations(this.dim, [new Range(0, 0, this.textEditor.document.lineCount, Number.MAX_VALUE)]);
+		this.textEditor.setDecorations(this.dim, [
+			new Range(
+				0,
+				0,
+				this.textEditor.document.lineCount,
+				Number.MAX_VALUE
+			),
+		]);
 	};
 
 	clearDim = () => {

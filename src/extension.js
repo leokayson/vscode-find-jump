@@ -35,7 +35,11 @@ export function activate(context: ExtensionContext) {
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.backspace`,
 			findJump.backspace,
-		)
+		),
+		commands.registerTextEditorCommand(
+			`${Const.EXTENSION_NAME}.goToFirstMatch`,
+			findJump.goToFirstMatch,
+		),
 	);
 
 	function updateConfig(e: ConfigurationChangeEvent): void {

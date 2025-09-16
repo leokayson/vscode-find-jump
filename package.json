@@ -1,15 +1,15 @@
 {
 	"name": "find-jump",
-	"displayName": "Find => Jump",
-	"description": "Like Ace Jump, but better. Quickly move cursor to visible location",
-	"version": "0.6.3",
-	"publisher": "usernamehw",
+	"displayName": "Find-Jump-2",
+	"description": "Like Ace Jump & Find-Jump-2. Quickly move cursor to visible location, including start/end of character/word.",
+	"version": "0.1.0",
+	"publisher": "kayson",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/usernamehw/vscode-find-jump"
+		"url": "https://github.com/leokayson/vscode-find-jump"
 	},
 	"categories": [
 		"Other"
@@ -34,19 +34,14 @@
 		"ui",
 		"workspace"
 	],
-	"activationEvents": [
-		"onCommand:findJump.activate",
-		"onCommand:findJump.activateWithSelection",
-		"onCommand:findJump.goToFirstMatch"
-	],
 	"main": "./dist/extension",
 	"contributes": {
 		"configuration": {
-			"title": "Find => Jump",
+			"title": "Find-Jump-2",
 			"properties": {
 				"findJump.jumpChars": {
 					"type": "string",
-					"default": "jfdksa;wibceghlmnopqrtuvxyzJFDKSABCEGHILMNOPQRTUVWXYZ",
+					"default": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,./l;'p[]",
 					"markdownDescription": "Use custom alphabet for jump chars. The order is important. Default value is assigned with qwerty keyboard in mind (Particularly, home row keys `A S D F J K L ;` put up front)."
 				},
 				"findJump.excludeNextChars": {
@@ -76,15 +71,19 @@
 				},
 				"findJump.jumpCursorPosition": {
 					"type": "string",
-					"default": "start",
+					"default": "charStart",
 					"enum": [
-						"start",
-						"end"
+						"charStart",
+						"charEnd",
+						"wordStart",
+						"wordEnd"
 					],
 					"description": "Place where to jump cursor.",
 					"enumDescriptions": [
 						"Jump to the start of the range.",
-						"Jump to the end of the range."
+						"Jump to the end of the range.",
+						"Jump to the start of the word.",
+						"Jump to the end of the word."
 					]
 				},
 				"findJump.letterBackground": {
@@ -154,33 +153,32 @@
 			{
 				"command": "findJump.activate",
 				"title": "Activate",
-				"category": "Find => Jump"
+				"category": "Find-Jump-2"
 			},
 			{
 				"command": "findJump.activateWithSelection",
 				"title": "Activate in selection mode",
-				"category": "Find => Jump"
-			},
-			{
-				"command": "findJump.goToFirstMatch",
-				"title": "Jump to first match",
-				"category": "Find => Jump"
+				"category": "Find-Jump-2"
 			},
 			{
 				"command": "findJump.cancel",
 				"title": "Cancel",
-				"category": "Find => Jump"
+				"category": "Find-Jump-2"
 			},
 			{
 				"command": "findJump.backspace",
 				"title": "Backspace",
-				"category": "Find => Jump"
+				"category": "Find-Jump-2"
 			}
 		],
 		"keybindings": [
 			{
 				"command": "findJump.activate",
-				"key": "ctrl+;"
+				"key": "ctrl+j"
+			},
+			{
+				"command": "findJump.activateWithSelection",
+				"key": "ctrl+shift+j"
 			},
 			{
 				"command": "findJump.cancel",
@@ -201,10 +199,6 @@
 				},
 				{
 					"command": "findJump.activateWithSelection",
-					"when": "never"
-				},
-				{
-					"command": "findJump.goToFirstMatch",
 					"when": "never"
 				},
 				{

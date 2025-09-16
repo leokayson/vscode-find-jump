@@ -18,9 +18,9 @@ A few things to note:
 
 |Command|Description|
 |-|-|
-|findJump.activate|Find => Jump: Activate|
-|findJump.activateWithSelection|Find => Jump: Activate in selection mode|
-|findJump.goToFirstMatch|Find => Jump: Jump to first match|
+|findJump.activate|Find-Jump-2: Activate|
+|findJump.activateWithSelection|Find-Jump-2: Activate in selection mode|
+|findJump.goToFirstMatch|Find-Jump-2: Jump to first match|
 <!-- COMMANDS_END -->
 
 <!-- SETTINGS_START -->
