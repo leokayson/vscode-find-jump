@@ -6,14 +6,14 @@ import {
 	workspace,
 } from "vscode";
 import { updateDecorationTypes } from "./decorations";
-import { FindJump } from "./findJump";
+import { FindJump2 } from "./findJump";
 import { subscriptions as inlineInputSubscriptions } from "./inlineInput";
 import { ExtensionConfig } from "./types";
 
 export let extensionConfig: ExtensionConfig;
 
 export const enum Const {
-	EXTENSION_NAME = "findJump",
+	EXTENSION_NAME = "findJump2",
 }
 
 export abstract class Global {
@@ -25,44 +25,48 @@ export function activate(context: ExtensionContext) {
 		Const.EXTENSION_NAME
 	) as any as ExtensionConfig;
 	updateDecorationTypes();
-	const findJump = new FindJump();
+	const findJump2 = new FindJump2();
 
 	context.subscriptions.push(
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateCharStart`,
-			findJump.activateCharStart
+			findJump2.activateCharStart
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateCharEnd`,
-			findJump.activateCharEnd
+			findJump2.activateCharEnd
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateWordStart`,
-			findJump.activateWordStart
+			findJump2.activateWordStart
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateWordEnd`,
-			findJump.activateWordEnd
+			findJump2.activateWordEnd
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateCharStartSelection`,
-			findJump.activateCharStartSelection
+			findJump2.activateCharStartSelection
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateCharEndSelection`,
-			findJump.activateCharEndSelection
+			findJump2.activateCharEndSelection
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateWordStartSelection`,
-			findJump.activateWordStartSelection
+			findJump2.activateWordStartSelection
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.activateWordEndSelection`,
-			findJump.activateWordEndSelection
+			findJump2.activateWordEndSelection
+		),
+		commands.registerTextEditorCommand(
+			`${Const.EXTENSION_NAME}.cancel`,
+			findJump2.cancel
 		),
 		commands.registerTextEditorCommand(
 			`${Const.EXTENSION_NAME}.backspace`,
-			findJump.backspace
+			findJump2.backspace
 		)
 	);
 
@@ -75,7 +79,7 @@ export function activate(context: ExtensionContext) {
 			Const.EXTENSION_NAME
 		) as any as ExtensionConfig;
 		updateDecorationTypes();
-		findJump.cancel();
+		findJump2.cancel();
 	}
 
 	context.subscriptions.push(

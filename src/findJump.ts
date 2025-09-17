@@ -5,7 +5,7 @@ import { getMatchesAndAvailableJumpChars } from './getMatches';
 import { InlineInput } from './inlineInput';
 type findJumpPosition = "charStart" | "charEnd" | "wordStart" | "wordEnd";
 
-export class FindJump {
+export class FindJump2 {
 	isActive = false;
 	isSelectionMode = false;
 	position: findJumpPosition = "wordEnd";
