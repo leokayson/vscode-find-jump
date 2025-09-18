@@ -2,7 +2,7 @@
 	"name": "find-jump-2",
 	"displayName": "FindJump2",
 	"description": "Like Ace Jump & Find => Jump. Quickly move cursor to visible location, including start/end of character/word.",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"publisher": "kaysonwu666",
 	"engines": {
 		"vscode": "^1.57.0"
@@ -53,7 +53,7 @@
 			"properties": {
 				"findJump2.jumpChars": {
 					"type": "string",
-					"default": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,./l;'p[]",
+					"default": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./l;'p[]",
 					"markdownDescription": "Use custom alphabet for jump chars. The order is important. Default value is assigned with qwerty keyboard in mind (Particularly, home row keys `A S D F J K L ;` put up front)."
 				},
 				"findJump2.excludeNextChars": {
@@ -74,7 +74,7 @@
 				"findJump2.dimWhenActive": {
 					"type": "boolean",
 					"default": true,
-					"description": "When enabled - will show code as grayscale to see matches more easily."
+					"description": "When enabled - will show code as gray-scale to see matches more easily."
 				},
 				"findJump2.activateToToggle": {
 					"type": "boolean",

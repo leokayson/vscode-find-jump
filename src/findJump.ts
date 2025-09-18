@@ -33,7 +33,7 @@ export class FindJump2 {
 
 	activateWordStart = (textEditor: TextEditor): void => {
 		this.position = "wordStart";
-		this.activate(textEditor);``
+		this.activate(textEditor);
 	};
 
 	activateWordEnd = (textEditor: TextEditor): void => {
@@ -109,7 +109,7 @@ export class FindJump2 {
 		if (matches.length > 0) {
 			this.associationManager.dispose();
 
-			// Dont gray out matches from previous iteration
+			// Don't gray out matches from previous iteration
 			this.clearBright();
 			this.allRanges = [];
 		}

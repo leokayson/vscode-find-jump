@@ -1,3 +1,7 @@
+## 0.1.2 `18 Sep 2025`
+
+1. Remove numbers in the default jumpChars to make it possible to input numbers to jump
+
 ## 0.1.1 `17 Sep 2025`
 
 1. Rename all "findJump" to "findJump2", to avoid confusion with commands in "Find => Jump" extension
